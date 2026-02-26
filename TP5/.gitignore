@@ -1,0 +1,38 @@
+# ==============================================
+# TERRAFORM - Ne jamais versionner ces fichiers
+# ==============================================
+
+# Fichier de valeurs des variables (contient les IDs de ressources AWS)
+*.tfvars
+*.tfvars.json
+
+# Répertoire des plugins Terraform (volumineux, inutile à versionner)
+**/.terraform/
+.terraform.lock.hcl
+
+# State Terraform (contient des données sensibles en clair !)
+*.tfstate
+*.tfstate.backup
+*.tfstate.*.backup
+
+# Fichiers de plan (peuvent contenir des secrets)
+*.tfplan
+
+# ==============================================
+# AWS - Ne jamais versionner ces fichiers
+# ==============================================
+
+# Credentials AWS locaux
+.aws/
+credentials
+
+# Variables d'environnement locales
+.env
+*.env
+*_VARS.sh
+
+# ==============================================
+# SYSTEME
+# ==============================================
+.DS_Store
+Thumbs.db

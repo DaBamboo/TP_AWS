@@ -1,0 +1,40 @@
+/*Resultat de la commande :
+aws elbv2 describe-target-health \
+     --target-group-arn $TG_ARN \
+     --profile training
+*/
+
+{
+    "TargetHealthDescriptions": [
+        {
+            "Target": {
+                "Id": "i-055b7a4016c213447",
+                "Port": 80
+            },
+            "HealthCheckPort": "80",
+            "TargetHealth": {
+                "State": "healthy"
+            },
+            "AdministrativeOverride": {
+                "State": "no_override",
+                "Reason": "AdministrativeOverride.NoOverride",
+                "Description": "No override is currently active on target"
+            }
+        },
+        {
+            "Target": {
+                "Id": "i-0cf945baf422d56f1",
+                "Port": 80
+            },
+            "HealthCheckPort": "80",
+            "TargetHealth": {
+                "State": "healthy"
+            },
+            "AdministrativeOverride": {
+                "State": "no_override",
+                "Reason": "AdministrativeOverride.NoOverride",
+                "Description": "No override is currently active on target"
+            }
+        }
+    ]
+}
