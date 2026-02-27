@@ -61,11 +61,7 @@ Ce TP a été entièrement réalisé avec **Terraform**. L'ensemble des fichiers
 
 ## Output Terraform
 
-Après `terraform apply`, le DNS de l'ALB est disponible directement :
-
-```bash
-terraform output alb_dns_name
-```
+Après `terraform apply`, le DNS de l'ALB est disponible directement grâce au fichier outputs.tf que l'on a créé :
 
 ![Terraform apply output](image-1.png)
 
@@ -73,11 +69,17 @@ terraform output alb_dns_name
 
 ### ALB accessible sur le port 8080
 
+![Output apres apply](image.png)
+
 ```
 http://tp5-alb-736547410.eu-west-3.elb.amazonaws.com:8080
 ```
 
-![Page web ALB](image.png)
+![Page web](image-2.png)
+
+Si on refresh, le load balancing nous fait passer sur le second serveur :
+
+![Page web apres refresh](image-3.png)
 
 ### Health check des instances ASG
 
