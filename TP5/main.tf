@@ -219,7 +219,7 @@ resource "aws_lb_listener" "http_redirect" {
   }
 }
 
-# Listener HTTP port 80 direct vers le Target Group (pour les tests du TP)
+# Listener HTTP port 8080 direct vers le Target Group (pour les tests du TP)
 resource "aws_lb_listener" "http_forward" {
   load_balancer_arn = aws_lb.tp5_alb.arn
   port              = 8080

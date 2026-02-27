@@ -141,22 +141,14 @@ aws ec2 terminate-instances `
 +------------+----------+-----------------------+-------------+
 ```
 
-> ✅ **Validation :** L'ASG a bien remplacé automatiquement l'instance terminée pour maintenir `desired_capacity = 2`.
-> Le résultat complet du health check est disponible dans `exports/HealthCheck.json`.
+> **Validation :** L'ASG a bien remplacé automatiquement l'instance terminée pour maintenir `desired_capacity = 2`.
+> Le résultat complet du health check est disponible dans `HealthCheck.json`.
 
 ## Contrôles sécurité appliqués
 
-- ✅ Seul l'ALB est exposé sur internet — instances privées sans IP publique
-- ✅ SG ALB → instances uniquement sur port applicatif (80) — aucun autre port autorisé
-- ✅ IMDSv2 forcé sur toutes les instances (`HttpTokens = required`)
-- ✅ Pas de clé SSH — administration via SSM Session Manager
-- ✅ Redirection HTTP 301 vers HTTPS mise en place sur le listener port 80
-- ✅ Tags obligatoires appliqués sur toutes les ressources (`Project`, `Owner`, `Env`, `CostCenter`)
-
-## Teardown
-
-> ⚠️ Conserver l'ALB et l'ASG pour les séances suivantes selon les consignes.
-
-```bash
-terraform destroy -var-file=vars.tfvars
-```
+- Seul l'ALB est exposé sur internet — instances privées sans IP publique
+- SG ALB → instances uniquement sur port applicatif (80) — aucun autre port autorisé
+- IMDSv2 forcé sur toutes les instances (`HttpTokens = required`)
+- Pas de clé SSH — administration via SSM Session Manager
+- Redirection HTTP 301 vers HTTPS mise en place sur le listener port 80
+- Tags appliqués sur toutes les ressources (`Project`, `Owner`, `Env`, `CostCenter`)
