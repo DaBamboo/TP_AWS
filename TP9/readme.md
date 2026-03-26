@@ -129,7 +129,34 @@ Le rapport du fichier rejeté indique le statut `REJECTED` et la raison `type no
 ## Teardown
  
 ```bash
+aws s3 rm s3://tp9-lambda-trigger-clement --recursive --profile training
 terraform destroy -auto-approve
 ```
  
-Ayant rencontré une erreur lors du terraform destroy car le bucket n'était pas vide, j'ai vu que grâce à `force_destroy = true`, Terraform vide et supprime le bucket automatiquement, y compris toutes les versions d'objets
+J'ai cependant renonctré une erreur lors du terraform destroy car le bucket n'était pas vide à cause du versioning : les objets "supprimés" laissent des delete markers — aws s3 rm --recursive ne les efface pas.
+J'ai donc dû les supprimer : 
+```bash
+# Supprimer toutes les versions et delete markers
+aws s3api delete-objects \
+  --bucket tp9-lambda-trigger-clement \
+  --delete "$(aws s3api list-object-versions \
+    --bucket tp9-lambda-trigger-clement \
+    --query '{Objects: Versions[].{Key:Key,VersionId:VersionId}}' \
+    --output json \
+    --profile training)" \
+  --profile training
+
+# Supprimer les delete markers
+aws s3api delete-objects \
+  --bucket tp9-lambda-trigger-clement \
+  --delete "$(aws s3api list-object-versions \
+    --bucket tp9-lambda-trigger-clement \
+    --query '{Objects: DeleteMarkers[].{Key:Key,VersionId:VersionId}}' \
+    --output json \
+    --profile training)" \
+  --profile training
+
+# Puis relancer le destroy
+terraform destroy -auto-approve
+```
+En ajoutant `force_destroy = true`, Terraform peut vider et supprimer le bucket automatiquement, y compris toutes les versions d'objets
