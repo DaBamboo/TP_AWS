@@ -1,4 +1,4 @@
-# ── VPC ──────────────────────────────────────────────────────────
+# ── VPC ──────────────────────────────────────────────────────────────
 resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
@@ -7,7 +7,7 @@ resource "aws_vpc" "main" {
   tags = { Name = "${var.project}-vpc" }
 }
 
-# ── Subnets ───────────────────────────────────────────────────────
+# ── Subnets ───────────────────────────────────────────────────────────
 resource "aws_subnet" "public_a" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.1.0/24"
@@ -36,13 +36,13 @@ resource "aws_subnet" "private_b" {
   tags              = { Name = "${var.project}-subnet-private-b" }
 }
 
-# ── Internet Gateway ──────────────────────────────────────────────
+# ── Internet Gateway ──────────────────────────────────────────────────
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
   tags   = { Name = "${var.project}-igw" }
 }
 
-# ── Elastic IP + NAT Gateway ──────────────────────────────────────
+# ── Elastic IP + NAT Gateway ──────────────────────────────────────────
 resource "aws_eip" "nat" {
   domain = "vpc"
   tags   = { Name = "${var.project}-eip-nat" }
@@ -55,7 +55,7 @@ resource "aws_nat_gateway" "nat" {
   tags          = { Name = "${var.project}-nat" }
 }
 
-# ── Route Tables ──────────────────────────────────────────────────
+# ── Route Tables ──────────────────────────────────────────────────────
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
   tags   = { Name = "${var.project}-rtb-public" }
@@ -96,7 +96,7 @@ resource "aws_route_table_association" "private_b" {
   route_table_id = aws_route_table.private.id
 }
 
-# ── Security Groups ───────────────────────────────────────────────
+# ── Security Groups ───────────────────────────────────────────────────
 resource "aws_security_group" "sg_web" {
   name        = "${var.project}-sg-web"
   description = "SG serveurs web publics"
@@ -169,7 +169,7 @@ resource "aws_security_group_rule" "db_from_app" {
   description              = "PostgreSQL depuis SG app uniquement"
 }
 
-# ── Rôle IAM pour EC2 (SSM + CloudWatch) ─────────────────────────
+# ── Rôle IAM pour EC2 (SSM + CloudWatch) ─────────────────────────────
 resource "aws_iam_role" "ec2_ssm" {
   name = "${var.project}-ec2-ssm-role"
 
@@ -198,7 +198,7 @@ resource "aws_iam_instance_profile" "ec2_ssm" {
   role = aws_iam_role.ec2_ssm.name
 }
 
-# ── AMI Amazon Linux 2023 (la plus récente) ───────────────────────
+# ── AMI Amazon Linux 2023 ─────────────────────────────────────────────
 data "aws_ami" "al2023" {
   most_recent = true
   owners      = ["amazon"]
@@ -214,7 +214,7 @@ data "aws_ami" "al2023" {
   }
 }
 
-# ── Instance EC2 privée (TP4) ─────────────────────────────────────
+# ── Instance EC2 privée ───────────────────────────────────────────────
 resource "aws_instance" "app" {
   ami                         = data.aws_ami.al2023.id
   instance_type               = "t3.micro"
@@ -223,7 +223,6 @@ resource "aws_instance" "app" {
   iam_instance_profile        = aws_iam_instance_profile.ec2_ssm.name
   associate_public_ip_address = false
 
-  # Forcer IMDSv2
   metadata_options {
     http_endpoint               = "enabled"
     http_tokens                 = "required"
