@@ -14,3 +14,5 @@ data "terraform_remote_state" "base" {
   }
 }
 ```
+Cela permet aussi d'avoir un .gitignore unique qui va permettre de ne pas pousser les fichiers sensibles de chaque TP sans avoir à en recréer un pour chaque TP
+
