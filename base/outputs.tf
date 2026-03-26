@@ -33,3 +33,7 @@ output "sg_db_id" {
 output "instance_id" {
   value = aws_instance.app.id
 }
+
+output "region" {
+  value = var.region
+}
